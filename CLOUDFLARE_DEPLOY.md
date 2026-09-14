@@ -29,9 +29,10 @@ Use these build settings:
 - Root directory: `/`
 - Production branch: `main`
 
-Add these build environment variables:
+The production D1 database ID is already configured. These optional build
+environment variables can be used later to override the defaults:
 
-- `CLOUDFLARE_D1_DATABASE_ID`: the D1 database ID copied above
+- `CLOUDFLARE_D1_DATABASE_ID`: replacement D1 database ID
 - `CLOUDFLARE_D1_DATABASE_NAME`: `jota-eme-bookings`
 - `CLOUDFLARE_WORKER_NAME`: `jota-eme-barber-studio`
 - `NODE_VERSION`: `22.13.0`
