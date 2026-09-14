@@ -16,10 +16,10 @@ CREATE TABLE `appointments` (
 	`notes` text,
 	`created_at` integer NOT NULL
 );
---> statement-breakpoint
-CREATE UNIQUE INDEX `idx_appointments_public_token` ON `appointments` (`public_token`);--> statement-breakpoint
-CREATE INDEX `idx_appointments_barber_date` ON `appointments` (`barber_id`,`date`);--> statement-breakpoint
-CREATE INDEX `idx_appointments_time_range` ON `appointments` (`barber_id`,`start_at`,`end_at`);--> statement-breakpoint
+
+CREATE UNIQUE INDEX `idx_appointments_public_token` ON `appointments` (`public_token`);
+CREATE INDEX `idx_appointments_barber_date` ON `appointments` (`barber_id`,`date`);
+CREATE INDEX `idx_appointments_time_range` ON `appointments` (`barber_id`,`start_at`,`end_at`);
 CREATE TABLE `blocked_time` (
 	`id` text PRIMARY KEY NOT NULL,
 	`barber_id` text NOT NULL,
@@ -28,8 +28,8 @@ CREATE TABLE `blocked_time` (
 	`reason` text NOT NULL,
 	`created_at` integer NOT NULL
 );
---> statement-breakpoint
-CREATE INDEX `idx_blocked_barber_time` ON `blocked_time` (`barber_id`,`start_at`,`end_at`);--> statement-breakpoint
+
+CREATE INDEX `idx_blocked_barber_time` ON `blocked_time` (`barber_id`,`start_at`,`end_at`);
 CREATE TABLE `clients` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
@@ -40,8 +40,8 @@ CREATE TABLE `clients` (
 	`visit_count` integer DEFAULT 0 NOT NULL,
 	`created_at` integer NOT NULL
 );
---> statement-breakpoint
-CREATE UNIQUE INDEX `idx_clients_phone` ON `clients` (`phone`);--> statement-breakpoint
+
+CREATE UNIQUE INDEX `idx_clients_phone` ON `clients` (`phone`);
 CREATE TABLE `notification_logs` (
 	`id` text PRIMARY KEY NOT NULL,
 	`appointment_id` text NOT NULL,
@@ -50,8 +50,8 @@ CREATE TABLE `notification_logs` (
 	`status` text NOT NULL,
 	`created_at` integer NOT NULL
 );
---> statement-breakpoint
-CREATE INDEX `idx_notifications_appointment` ON `notification_logs` (`appointment_id`);--> statement-breakpoint
+
+CREATE INDEX `idx_notifications_appointment` ON `notification_logs` (`appointment_id`);
 CREATE TABLE `waitlist` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
