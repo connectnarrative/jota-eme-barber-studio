@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Jota Eme Barber Studio | Barbería premium en Bocagrande",
   description: "Reserva tu corte, barba, facial o experiencia VIP en Jota Eme Barber Studio, Bocagrande, Cartagena.",
   keywords: ["barbería Cartagena", "barbería Bocagrande", "barber shop Cartagena", "haircut Cartagena"],
-  icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
+  icons: { icon: "/jota-eme-logo.jpg", shortcut: "/jota-eme-logo.jpg" },
 };
 
 export default function RootLayout({
