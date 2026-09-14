@@ -1,0 +1,6 @@
+import { NextResponse } from "next/server";
+import { eq } from "drizzle-orm";
+import { getDb } from "@/db";
+import { appointments } from "@/db/schema";
+export async function GET(_:Request,{params}:{params:Promise<{token:string}>}){try{const {token}=await params;const [row]=await getDb().select({clientName:appointments.clientName,serviceId:appointments.serviceId,barberId:appointments.barberId,date:appointments.date,time:appointments.time,status:appointments.status,price:appointments.price}).from(appointments).where(eq(appointments.publicToken,token)).limit(1);if(!row)return NextResponse.json({error:"Not found"},{status:404});return NextResponse.json(row)}catch{return NextResponse.json({error:"Unavailable"},{status:503})}}
+export async function PATCH(request:Request,{params}:{params:Promise<{token:string}>}){try{const {token}=await params;const body=await request.json() as {action?:string};if(body.action!=="cancel")return NextResponse.json({error:"Invalid action"},{status:400});const result=await getDb().update(appointments).set({status:"cancelled"}).where(eq(appointments.publicToken,token)).returning({id:appointments.id});if(!result.length)return NextResponse.json({error:"Not found"},{status:404});return NextResponse.json({ok:true,status:"cancelled"})}catch{return NextResponse.json({error:"Unavailable"},{status:503})}}

@@ -1,0 +1,11 @@
+import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+
+export const clients=sqliteTable("clients",{
+  id:text("id").primaryKey(),name:text("name").notNull(),phone:text("phone").notNull(),email:text("email"),preferredBarber:text("preferred_barber"),notes:text("notes"),visitCount:integer("visit_count").notNull().default(0),createdAt:integer("created_at").notNull()
+},t=>[uniqueIndex("idx_clients_phone").on(t.phone)]);
+export const appointments=sqliteTable("appointments",{
+  id:text("id").primaryKey(),publicToken:text("public_token").notNull(),clientId:text("client_id").notNull(),clientName:text("client_name").notNull(),phone:text("phone").notNull(),email:text("email"),serviceId:text("service_id").notNull(),barberId:text("barber_id").notNull(),date:text("date").notNull(),time:text("time").notNull(),startAt:integer("start_at").notNull(),endAt:integer("end_at").notNull(),price:integer("price").notNull(),status:text("status").notNull().default("confirmed"),notes:text("notes"),createdAt:integer("created_at").notNull()
+},t=>[uniqueIndex("idx_appointments_public_token").on(t.publicToken),index("idx_appointments_barber_date").on(t.barberId,t.date),index("idx_appointments_time_range").on(t.barberId,t.startAt,t.endAt)]);
+export const blockedTime=sqliteTable("blocked_time",{id:text("id").primaryKey(),barberId:text("barber_id").notNull(),startAt:integer("start_at").notNull(),endAt:integer("end_at").notNull(),reason:text("reason").notNull(),createdAt:integer("created_at").notNull()},t=>[index("idx_blocked_barber_time").on(t.barberId,t.startAt,t.endAt)]);
+export const waitlist=sqliteTable("waitlist",{id:text("id").primaryKey(),name:text("name").notNull(),phone:text("phone").notNull(),serviceId:text("service_id").notNull(),barberId:text("barber_id"),preferredDate:text("preferred_date").notNull(),preferredTime:text("preferred_time"),status:text("status").notNull().default("waiting"),createdAt:integer("created_at").notNull()});
+export const notificationLogs=sqliteTable("notification_logs",{id:text("id").primaryKey(),appointmentId:text("appointment_id").notNull(),channel:text("channel").notNull(),kind:text("kind").notNull(),status:text("status").notNull(),createdAt:integer("created_at").notNull()},t=>[index("idx_notifications_appointment").on(t.appointmentId)]);
