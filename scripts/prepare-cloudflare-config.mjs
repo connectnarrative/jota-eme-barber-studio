@@ -13,6 +13,7 @@ const workerName =
 const config = JSON.parse(await readFile(configPath, "utf8"));
 config.name = workerName;
 config.topLevelName = workerName;
+config.find_additional_modules = true;
 config.d1_databases = [
   {
     binding: "DB",
