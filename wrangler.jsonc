@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jota-eme-barber-studio",
+  "main": "dist/server/index.js",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "no_bundle": true,
+  "assets": {
+    "directory": "dist/client"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "jota-eme-bookings",
+      "database_id": "b56e34d5-9543-4d2e-8715-b4140e9755fd"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "build": {
+    "command": "pnpm run build:cloudflare"
+  }
+}
