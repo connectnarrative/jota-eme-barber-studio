@@ -14,6 +14,7 @@ const config = JSON.parse(await readFile(configPath, "utf8"));
 config.name = workerName;
 config.topLevelName = workerName;
 config.no_bundle = false;
+config.compatibility_flags = [...new Set(config.compatibility_flags ?? [])];
 delete config.find_additional_modules;
 delete config.rules;
 config.d1_databases = [
