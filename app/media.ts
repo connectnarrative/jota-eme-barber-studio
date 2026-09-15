@@ -7,6 +7,6 @@ export const studioMedia = {
 };
 export const portfolio = [
   { image: "/media/signature.webp", es: "Líneas definidas", en: "Defined lines", detailEs: "Degradado y acabado preciso", detailEn: "Fade and precise finishing", service: "haircut" },
-  { image: "/media/texture.webp", es: "Textura y carácter", en: "Texture and character", detailEs: "Un estilo hecho para ti", detailEn: "A style made for you", service: "haircut" },
+  { image: "/media/texture-poster.webp", video: "/media/texture.mp4", poster: "/media/texture-poster.webp", es: "Textura y carácter", en: "Texture and character", detailEs: "Un estilo hecho para ti", detailEn: "A style made for you", service: "haircut" },
   { image: "/media/detail.webp", es: "Cada detalle cuenta", en: "Every detail matters", detailEs: "El proceso Jota Eme", detailEn: "The Jota Eme process", service: "haircut" },
 ];
