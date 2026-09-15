@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { ArrowLeft, LockKeyhole } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,7 +38,7 @@ export default function AdminLoginPage() {
     <div className="barber-stripe absolute inset-x-0 top-0 h-1.5" />
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_15%,rgba(255,255,255,.08),transparent_38%)]" />
     <section className="relative w-full max-w-md border border-white/12 bg-[#111]/92 p-7 shadow-2xl sm:p-10">
-      <a href="/" className="mb-8 inline-flex items-center gap-2 text-sm text-white/55 hover:text-white"><ArrowLeft size={16}/> Volver al sitio</a>
+      <Link href="/" className="mb-8 inline-flex items-center gap-2 text-sm text-white/55 hover:text-white"><ArrowLeft size={16}/> Volver al sitio</Link>
       <img src="/jota-eme-logo.jpg" alt="Jota Eme Barber Studio" className="mx-auto h-28 w-28 rounded-full bg-white object-cover" />
       <div className="mt-6 text-center">
         <p className="eyebrow text-white/45">STUDIO OS</p>

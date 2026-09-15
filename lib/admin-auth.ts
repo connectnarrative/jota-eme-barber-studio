@@ -1,5 +1,5 @@
 import { env } from "cloudflare:workers";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 
 export const ADMIN_COOKIE = "jota_eme_admin";
 
@@ -31,8 +31,6 @@ export async function createAdminSessionValue() {
 }
 
 export async function isAdminAuthorized() {
-  const requestHeaders = await headers();
-  if (requestHeaders.get("cf-access-authenticated-user-email") || requestHeaders.get("oai-authenticated-user-id")) return true;
   const configured = adminPassword();
   if (!configured) return false;
   const session = (await cookies()).get(ADMIN_COOKIE)?.value;

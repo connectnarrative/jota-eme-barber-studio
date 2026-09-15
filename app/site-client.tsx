@@ -2,21 +2,18 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, AtSign, CalendarDays, Check, ChevronLeft, Clock3, MapPin, Menu, Phone, Play, Scissors, Sparkles, X } from "lucide-react";
+import { ArrowRight, AtSign, CalendarDays, Check, ChevronLeft, Clock3, MapPin, Menu, Phone, Scissors, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { barbers, money, services } from "./data";
 
-const heroImage="/studio-hero.webp";
+import { SilentVideo } from "@/components/silent-video";
+import { portfolio, studioMedia } from "./media";
 const Instagram=AtSign;
 const slots=["9:15 AM","10:00 AM","11:30 AM","2:15 PM","4:30 PM","6:45 PM"];
-const looks=[
-  {image:"/look-fresh-cut.jpg",title:"Taper limpio",subtitle:"Precisión en cada línea",href:"https://www.instagram.com/cheo_barber1/reel/DcJIfm-R3x-/"},
-  {image:"/look-house-call.jpg",title:"House call",subtitle:"El estándar Jota Eme, donde estés",href:"https://www.instagram.com/alejhenao/reel/DcgfJ-5uruP/"},
-  {image:"/studio-hero.webp",title:"El estudio",subtitle:"Bocagrande · Cartagena",href:"https://www.instagram.com/jotaemebarberstudio/"},
-];
+
 
 export function HomeExperience(){
   const [lang,setLang]=useState<"es"|"en">("es");
@@ -28,7 +25,7 @@ export function HomeExperience(){
 
   useEffect(()=>{
     const requested=new URLSearchParams(window.location.search).get("book");
-    if(requested&&services.some(s=>s.id===requested))openBooking(requested);
+    if(requested&&services.some(s=>s.id===requested))queueMicrotask(()=>openBooking(requested));
     const context=(document as Document & {modelContext?:{registerTool:(tool:unknown,options?:{signal?:AbortSignal})=>void|Promise<void>}}).modelContext;
     if(!context?.registerTool)return;const lifecycle=new AbortController();
     void Promise.resolve(context.registerTool({name:"start_jota_eme_booking",title:"Start a Jota Eme booking",description:"Open the Jota Eme appointment flow with an optional service selected.",inputSchema:{type:"object",properties:{serviceId:{type:"string",enum:services.map(s=>s.id)}},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute:(input:unknown)=>{const serviceId=typeof input==="object"&&input&&"serviceId" in input?String((input as {serviceId:string}).serviceId):"haircut";openBooking(services.some(s=>s.id===serviceId)?serviceId:"haircut");return{opened:true,serviceId}}},{signal:lifecycle.signal})).catch(()=>{});
@@ -55,7 +52,7 @@ export function HomeExperience(){
     </header>
 
     <section id="inicio" className="grain relative min-h-[860px] pt-[72px] lg:h-screen lg:min-h-[720px]">
-      <img src={heroImage} alt="Jota Eme Barber Studio" className="absolute inset-0 h-full w-full object-cover object-center opacity-55"/>
+      <SilentVideo {...studioMedia.hero} className="absolute inset-0 opacity-70 lg:left-[38%]"/>
       <div className="absolute inset-0 bg-[linear-gradient(90deg,#090908_0%,rgba(9,9,8,.88)_40%,rgba(9,9,8,.16)_78%),linear-gradient(0deg,#090908_0%,transparent_45%)]"/>
       <div className="relative z-10 mx-auto grid h-full max-w-[1500px] content-center gap-10 px-5 py-16 lg:grid-cols-[1.15fr_.65fr] lg:px-10">
         <div className="rise max-w-4xl pt-10 lg:pt-0">
@@ -92,8 +89,8 @@ export function HomeExperience(){
     <section id="trabajo" className="border-b border-white/10 px-5 py-24 lg:px-10 lg:py-36">
       <div className="mx-auto max-w-[1500px]">
         <div className="grid gap-6 lg:grid-cols-[1.05fr_.75fr] lg:items-end"><div><p className="eyebrow text-[#e84c3d]">03 · {t("NUESTRO TRABAJO","OUR WORK")}</p><h2 className="display mt-4 text-6xl leading-[.88] sm:text-9xl">{t("CORTES QUE HABLAN.","CUTS THAT SPEAK.")}</h2></div><p className="max-w-xl text-lg leading-relaxed text-white/55">{t("Trabajo real de Jota Eme y Cheo. Fades limpios, textura, barba y transformaciones hechas en Cartagena.","Real work by Jota Eme and Cheo. Clean fades, texture, beard work and transformations made in Cartagena.")}</p></div>
-        <div className="mt-14 grid gap-4 md:grid-cols-3">{looks.map((look,index)=><a key={look.href} href={look.href} target="_blank" rel="noreferrer" className={`group relative overflow-hidden bg-[#171715] ${index===1?"md:translate-y-10":""}`}><img src={look.image} alt={look.title} className="aspect-[4/5] h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]"/><div className="absolute inset-0 bg-gradient-to-t from-black via-black/5 to-transparent"/><div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-5"><div><h3 className="text-2xl font-black">{look.title}</h3><p className="mt-1 text-sm text-white/55">{look.subtitle}</p></div><span className="grid h-12 w-12 place-items-center rounded-full bg-white text-black"><Play size={18} fill="currentColor"/></span></div></a>)}</div>
-        <div className="mt-24 grid gap-8 lg:grid-cols-[.7fr_1.3fr] lg:items-start"><div className="lg:sticky lg:top-28"><p className="eyebrow text-[#e84c3d]">REELS · @JOTAEMEBARBERSTUDIO</p><h3 className="display mt-4 text-5xl leading-none sm:text-7xl">{t("MIRA EL PROCESO.","WATCH THE PROCESS.")}</h3><p className="mt-5 max-w-md text-white/55">{t("Desde la consulta hasta el último detalle. Reproduce trabajo publicado por el estudio y reserva el look que quieres.","From consultation to the finishing touch. Watch work published by the studio and book the look you want.")}</p><a href="https://www.instagram.com/jotaemebarberstudio/" target="_blank" rel="noreferrer" className="mt-7 inline-flex items-center gap-2 border-b border-white/25 pb-2 text-sm font-bold">VER INSTAGRAM <ArrowRight size={17}/></a></div><div className="grid gap-5 sm:grid-cols-2"><div className="overflow-hidden border border-white/10 bg-white"><iframe title="Transformación Jota Eme" src="https://www.instagram.com/reel/DcJIfm-R3x-/embed/" className="aspect-[9/16] w-full" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"/></div><div className="overflow-hidden border border-white/10 bg-white sm:translate-y-12"><iframe title="Experiencia Jota Eme" src="https://www.instagram.com/reel/Dcopsm4zWog/embed/" className="aspect-[9/16] w-full" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"/></div></div></div>
+        <div className="mt-14 grid gap-4 md:grid-cols-3">{portfolio.map((look,index)=><article key={look.image} className={`group relative overflow-hidden bg-[#171715] ${index===1?"md:translate-y-10":""}`}><img src={look.image} alt={t(look.es,look.en)} loading="lazy" width={720} height={1280} className="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-[1.035]"/><div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"/><div className="absolute inset-x-0 bottom-0 p-5"><h3 className="text-2xl font-black">{t(look.es,look.en)}</h3><p className="mt-1 text-sm text-white/65">{t(look.detailEs,look.detailEn)}</p><button onClick={()=>openBooking(look.service)} className="mt-4 inline-flex items-center gap-2 border-b border-white/40 pb-1 text-xs font-bold tracking-widest">{t("RESERVAR ESTE LOOK","BOOK THIS LOOK")} <ArrowRight size={15}/></button></div></article>)}</div>
+        <div className="mt-24 grid gap-8 lg:grid-cols-[.7fr_1.3fr] lg:items-start"><div className="lg:sticky lg:top-28"><p className="eyebrow text-[#e84c3d]">JOTA EME · {t("EN MOVIMIENTO","IN MOTION")}</p><h3 className="display mt-4 text-5xl leading-none sm:text-7xl">{t("EL DETALLE LO ES TODO.","IT’S ALL IN THE DETAIL.")}</h3><p className="mt-5 max-w-md text-white/55">{t("Las manos, la técnica y el resultado. Así se vive una sesión en Jota Eme.","The hands, the technique and the result. A glimpse into a session at Jota Eme.")}</p><Button onClick={()=>openBooking()} className="mt-7 h-12 rounded-none px-6">{t("RESERVA TU SESIÓN","BOOK YOUR SESSION")} <ArrowRight size={17}/></Button></div><div className="grid grid-cols-2 gap-3 sm:gap-5"><SilentVideo {...studioMedia.cut} className="relative aspect-[9/16] bg-[#171715]"/><SilentVideo {...studioMedia.ritual} className="relative aspect-[9/16] translate-y-8 bg-[#171715] sm:translate-y-12"/></div></div>
       </div>
     </section>
 
@@ -107,13 +104,12 @@ export function HomeExperience(){
     <footer className="border-t border-white/10 px-5 py-8 lg:px-10"><div className="mx-auto flex max-w-[1500px] flex-col gap-5 text-sm text-white/45 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-3"><img src="/jota-eme-logo.jpg" alt="Jota Eme Barber Studio" className="h-12 w-12 rounded-full bg-white object-cover"/><b className="display text-2xl text-white">JOTA EME.</b></div><span>© 2026 Jota Eme Barber Studio</span><div className="flex gap-5"><a href="https://www.instagram.com/jotaemebarberstudio">Instagram</a><a href="/admin">Admin</a><a href="https://book.weibook.co/jotaeme-barberstudio">WeiBook</a></div></div></footer>
 
     <div className="fixed inset-x-0 bottom-0 z-30 flex border-t border-white/15 bg-[#0b0b0a]/95 p-3 backdrop-blur-xl sm:hidden"><Button onClick={()=>openBooking()} className="h-13 w-full rounded-none text-sm font-black tracking-[.1em]">{t("RESERVAR CITA","BOOK APPOINTMENT")} <ArrowRight/></Button></div>
-    <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} initialService={selectedService} lang={lang}/>
+    <BookingDialog key={`${bookingOpen}-${selectedService}`} open={bookingOpen} onOpenChange={setBookingOpen} initialService={selectedService} lang={lang}/>
   </main>;
 }
 
 function BookingDialog({open,onOpenChange,initialService,lang}:{open:boolean;onOpenChange:(v:boolean)=>void;initialService:string;lang:"es"|"en"}){
   const [step,setStep]=useState(1);const [serviceId,setServiceId]=useState(initialService);const [barber,setBarber]=useState("any");const [day,setDay]=useState(0);const [slot,setSlot]=useState("");const [submitted,setSubmitted]=useState(false);const [loading,setLoading]=useState(false);const [form,setForm]=useState({name:"",phone:"",email:"",notes:""});
-  useEffect(()=>{if(open){setServiceId(initialService);setStep(1);setSubmitted(false);setSlot("")}},[open,initialService]);
   const t=(es:string,en:string)=>lang==="es"?es:en;const service=services.find(s=>s.id===serviceId)!;
   const days=useMemo(()=>Array.from({length:6},(_,i)=>{const d=new Date();d.setDate(d.getDate()+i);return d}),[]);
   const submit=async()=>{if(!form.name||!form.phone||!slot)return;setLoading(true);try{const response=await fetch("/api/bookings",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({serviceId,barber,date:days[day].toISOString().slice(0,10),time:slot,...form})});const data=await response.json();if(!response.ok){window.alert(data.error??t("No pudimos confirmar la cita.","We couldn’t confirm the booking."));return}setBarber(data.barberId??barber);setSubmitted(true)}catch{window.alert(t("Revisa tu conexión e intenta de nuevo.","Check your connection and try again."))}finally{setLoading(false)}};
